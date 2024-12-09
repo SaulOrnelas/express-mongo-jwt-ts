@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Express } from 'express';
 import cors from 'cors';
 
 import { dbConnection } from './database/config.js';
@@ -9,9 +9,12 @@ import usersRoutes from './routes/users.js';
 import seedersRoutes from './routes/seeder.js';
 
 class Server {
+  app: Express;
+  port: string;
+  paths: { [key: string]: string };
   constructor() {
     this.app = express()
-    this.port = process.env.PORT
+    this.port = process.env.PORT ?? '3000';
 
     this.paths = {
       auth: '/api/auth',

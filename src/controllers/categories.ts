@@ -1,7 +1,8 @@
 import { response } from "express";
+import { Request, Response } from 'express';
 import { Category } from "../models/index.js";
 
-export const fetchCategories = async (req, res = response) => {
+export const fetchCategories = async (req: Request, res: Response = response) => {
   const { limit = 5, from = 0 } = req.query
   const query = { state: true }
 
@@ -19,27 +20,27 @@ export const fetchCategories = async (req, res = response) => {
   })
 }
 
-export const fetchCategoryById = async (req, res = response) => {
+export const fetchCategoryById = async (req: Request, res: Response = response) => {
   const { id } = req.params
   const category = await Category.findById(id).populate('user', 'name')
 
   res.json(category)
 }
 
-export const createCategory = async (req, res = response) => {
+export const createCategory = async (req: Request, res: Response = response) => {
   const name = req.body.name.toUpperCase()
 
   const categoryDB = await Category.findOne({ name })
 
   if (categoryDB) {
-    return res.status(400).json({
+    res.status(400).json({
       msg: `Category ${categoryDB.name}, already exists`,
     })
   }
 
   const data = {
     name,
-    user: req.user._id,
+    user: req.user?._id,
   }
 
   const category = new Category(data)
@@ -49,19 +50,19 @@ export const createCategory = async (req, res = response) => {
   res.status(201).json(category)
 }
 
-export const updateCategory = async (req, res = response) => {
+export const updateCategory = async (req: Request, res: Response = response) => {
   const { id } = req.params
   const { state, user, ...data } = req.body
 
   data.name = data.name.toUpperCase()
-  data.user = req.user._id
+  data.user = req.user?._id
 
   const category = await Category.findByIdAndUpdate(id, data, { new: true })
 
   res.json(category)
 }
 
-export const deleteCategory = async (req, res = response) => {
+export const deleteCategory = async (req: Request, res: Response = response) => {
   const { id } = req.params
   const deletedCategory = await Category.findByIdAndUpdate(
     id,

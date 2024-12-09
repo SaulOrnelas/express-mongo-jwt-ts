@@ -10,7 +10,7 @@ const roles = [
 ]
 
 const generateAdminsUsers = (() => {
-  let admins = [];
+  let admins: any = [];
   for(let i = 0; i < 2; i++) {
     const firstname = faker.person.firstName();
     const lastname = faker.person.lastName();
@@ -33,7 +33,7 @@ const generateAdminsUsers = (() => {
 })
 
 const generateWaitersUsers = (() => {
-  let waiters = [];
+  let waiters: any = [];
   for(let i = 0; i < 5; i++) {
     const firstname = faker.person.firstName();
     const lastname = faker.person.lastName();
@@ -56,7 +56,7 @@ const generateWaitersUsers = (() => {
 })
 
 const generateClientsUsers = (() => {
-  let clients = [];
+  let clients: any = [];
   for(let i = 0; i < 20; i++) {
     const firstname = faker.person.firstName();
     const lastname = faker.person.lastName();

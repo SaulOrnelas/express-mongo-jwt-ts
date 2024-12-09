@@ -1,6 +1,7 @@
+import { Request, Response, NextFunction } from 'express';
 import { response } from "express";
 
-export const isAdminRole = (req, res = response, next) => {
+export const isAdminRole = (req: Request, res:Response = response, next:NextFunction) => {
   if (!req.user) {
     return res.status(500).json({
       msg: "It's necessary validate token before",
@@ -18,15 +19,15 @@ export const isAdminRole = (req, res = response, next) => {
   next()
 }
 
-export const hasRole = (...roles) => {
-  return (req, res = response, next) => {
+export const hasRole = (...roles: string[]) => {
+  return (req:Request, res:Response = response, next:NextFunction) => {
     if (!req.user) {
       return res.status(500).json({
         msg: "It's necessary validate token before",
       })
     }
 
-    if (!roles.includes(req.user.rol)) {
+    if (!roles.includes(req.user?.role)) {
       return res.status(401).json({
         msg: `Service requires one of these roles ${roles}`,
       })

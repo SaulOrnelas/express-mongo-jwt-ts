@@ -1,7 +1,8 @@
 import { response } from "express";
+import { Request, Response } from 'express';
 import { Dish } from "../models/index.js";
 
-export const fetchDishes = async (req, res = response) => {
+export const fetchDishes = async (req: Request, res: Response = response) => {
   const { limit = 5, from = 0 } = req.query
   const query = { state: true }
 
@@ -20,7 +21,7 @@ export const fetchDishes = async (req, res = response) => {
   })
 }
 
-export const fetchDishById = async (req, res = response) => {
+export const fetchDishById = async (req: Request, res: Response = response) => {
   const { id } = req.params
   const dish = await Dish.findById(id)
     .populate('user', 'name')
@@ -29,13 +30,13 @@ export const fetchDishById = async (req, res = response) => {
   res.json(dish)
 }
 
-export const createDish = async (req, res = response) => {
+export const createDish = async (req: Request, res: Response = response) => {
   const { state, user, ...body } = req.body
 
-  const dishDB = await Dish.findOne({ name: body.name })
+  const dishDB: any = await Dish.findOne({ name: body.name })
 
   if (dishDB) {
-    return res.status(400).json({
+    res.status(400).json({
       msg: `Dish ${dishDB.nombre}, already exists`,
     })
   }
@@ -43,7 +44,7 @@ export const createDish = async (req, res = response) => {
   const data = {
     ...body,
     name: body.name.toUpperCase(),
-    user: req.user._id,
+    user: req.user?._id,
   }
 
   const dish = new Dish(data)
@@ -53,7 +54,7 @@ export const createDish = async (req, res = response) => {
   res.status(201).json(dish)
 }
 
-export const updateDish = async (req, res = response) => {
+export const updateDish = async (req: Request, res: Response = response) => {
   const { id } = req.params
   const { state, user, ...data } = req.body
 
@@ -61,14 +62,14 @@ export const updateDish = async (req, res = response) => {
     data.name = data.name.toUpperCase()
   }
 
-  data.user = req.user._id
+  data.user = req.user?._id
 
   const dish = await Dish.findByIdAndUpdate(id, data, { new: true })
 
   res.json(dish)
 }
 
-export const deleteDish = async (req, res = response) => {
+export const deleteDish = async (req: Request, res: Response = response) => {
   const { id } = req.params
   const deletedDish = await Dish.findByIdAndUpdate(
     id,

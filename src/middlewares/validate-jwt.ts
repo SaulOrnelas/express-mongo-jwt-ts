@@ -1,8 +1,9 @@
 import { response, request } from "express";
-import jwt from 'jsonwebtoken';
+import { Request, Response, NextFunction } from 'express';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import { User } from '../models/index.js'
 
-export const validateJWT = async (req = request, res = response, next) => {
+export const validateJWT = async (req:Request = request, res:Response = response, next:NextFunction) => {
   const token = req.header('x-token')
 
   if (!token) {
@@ -12,10 +13,10 @@ export const validateJWT = async (req = request, res = response, next) => {
   }
 
   try {
-    const { uid } = jwt.verify(token, process.env.SECRET_PRIVATE_KEY)
+    const tokenData: any = jwt.verify(token, process.env.SECRET_PRIVATE_KEY!)
 
     // Search user by id
-    const user = await User.findById(uid)
+    const user: any = await User.findById(tokenData.uid)
 
     if (!user) {
       return res.status(401).json({
@@ -29,8 +30,7 @@ export const validateJWT = async (req = request, res = response, next) => {
         msg: 'Invalid token - user deleted',
       })
     }
-
-    req.user = user
+    req.user = user;
     next()
   } catch (error) {
     console.log(error)

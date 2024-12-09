@@ -8,7 +8,7 @@ const getAdminsUsers = (async () => {
 
 const generateCategories = (async () => {
   const users = await getAdminsUsers();
-  let categories = [];
+  let categories: any = [];
 
   users.forEach(user => {
     for(let i = 0; i < 3; i++) {
@@ -20,8 +20,8 @@ const generateCategories = (async () => {
   });
 
   // Remove duplicated elements
-  const uniqueCategories = categories.filter((item, index, self) => 
-    index === self.findIndex((obj) => obj.name === item.name)
+  const uniqueCategories = categories.filter((item: any, index: number, self: any) => 
+    index === self.findIndex((obj: any) => obj.name === item.name)
   )
 
   return uniqueCategories;
@@ -29,9 +29,9 @@ const generateCategories = (async () => {
 
 export const insertDishes = (async () => {
   let categories = await generateCategories();
-  let dishes = [];
+  let dishes: any = [];
 
-  categories.forEach(category => {
+  categories.forEach((category: any) => {
     for(let i = 0; i < 6; i++) {
       let name = faker.food.dish();
       let description = faker.food.description();
@@ -48,8 +48,8 @@ export const insertDishes = (async () => {
   });
 
   // Remove duplicated elements
-  const uniqueDishes = dishes.filter((item, index, self) => 
-    index === self.findIndex((obj) => obj.name === item.name)
+  const uniqueDishes = dishes.filter((item: any, index: number, self: any) => 
+    index === self.findIndex((obj: any) => obj.name === item.name)
   )
 
   try {

@@ -15,7 +15,7 @@ export const existsEmail = async (correo = '') => {
   }
 }
 
-export const userExistsById = async (id) => {
+export const userExistsById = async (id: string) => {
   // Check if user exists
   const userExists = await User.findById(id)
   if (!userExists) {
@@ -23,7 +23,7 @@ export const userExistsById = async (id) => {
   }
 }
 
-export const categoryExistsById = async (id) => {
+export const categoryExistsById = async (id: string) => {
   // check if category exists
   const category = await Category.findById(id)
   if (!category) {
@@ -31,7 +31,7 @@ export const categoryExistsById = async (id) => {
   }
 }
 
-export const dishExistsById = async (id) => {
+export const dishExistsById = async (id: string) => {
   // Check if dish exists
   const dish = await Dish.findById(id)
   if (!dish) {
@@ -42,7 +42,7 @@ export const dishExistsById = async (id) => {
 /**
  * Validar colecciones permitidas
  */
-export const allowedCollections = (collection = '', collections = []) => {
+export const allowedCollections = (collection: string = '', collections: string[] = []) => {
   const collectionExists = collections.includes(collection)
   if (!collectionExists) {
     throw new Error(`Collection ${collection} isn't allowed, ${collections}`)
