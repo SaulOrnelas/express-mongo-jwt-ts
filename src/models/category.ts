@@ -1,6 +1,7 @@
 import { Schema, model } from "mongoose";
+import { CategoryInterfaceDoc } from "../interfaces/category.interface.js";
 
-const CategorySchema = new Schema({
+const CategorySchema = new Schema<CategoryInterfaceDoc>({
   name: {
     type: String,
     required: [true, 'Name is required'],
@@ -23,4 +24,4 @@ CategorySchema.methods.toJSON = function () {
   return data
 }
 
-export default model('Category', CategorySchema);
+export default model<CategoryInterfaceDoc>('Category', CategorySchema);

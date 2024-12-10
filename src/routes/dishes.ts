@@ -27,7 +27,7 @@ router.get(
   [
     check('id', 'MongoId invalid').isMongoId(),
     check('id').custom(dishExistsById),
-    //middlewares.validateFields,
+    middlewares.validateFields,
   ],
   fetchDishById
 )
@@ -36,11 +36,11 @@ router.get(
 router.post(
   '/',
   [
-    //middlewares.validateJWT,
+    middlewares.validateJWT,
     check('name', 'Name is required').not().isEmpty(),
     check('category', 'MongoId invalid').isMongoId(),
     check('category').custom(categoryExistsById),
-    //middlewares.validateFields,
+    middlewares.validateFields,
   ],
   createDish
 )
@@ -49,10 +49,10 @@ router.post(
 router.put(
   '/:id',
   [
-    //middlewares.validateJWT,
+    middlewares.validateJWT,
     check('category', 'MongoId invalid').isMongoId(),
     check('id').custom(dishExistsById),
-    //middlewares.validateFields,
+    middlewares.validateFields,
   ],
   updateDish
 )
@@ -61,11 +61,11 @@ router.put(
 router.delete(
   '/:id',
   [
-    //middlewares.validateJWT,
-    //middlewares.isAdminRole,
+    middlewares.validateJWT,
+    middlewares.isAdminRole,
     check('id', 'MongoId invalid').isMongoId(),
     check('id').custom(dishExistsById),
-    //middlewares.validateFields,
+    middlewares.validateFields,
   ],
   deleteDish
 )

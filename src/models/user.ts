@@ -1,6 +1,7 @@
 import { Schema, model } from 'mongoose';
+import { UserInterfaceDoc } from '../interfaces/user.interface.js';
 
-const UserSchema = new Schema({
+const UserSchema = new Schema<UserInterfaceDoc>({
   name: {
     type: String,
     required: [true, 'Name is required'],
@@ -36,4 +37,4 @@ UserSchema.methods.toJSON = function () {
   return user
 }
 
-export default model('User', UserSchema);
+export default model<UserInterfaceDoc>('User', UserSchema);

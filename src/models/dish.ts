@@ -1,6 +1,7 @@
 import { Schema, model } from "mongoose";
+import { DishInterfaceDoc } from "../interfaces/dish.interface.js";
 
-const DishSchema = new Schema({
+const DishSchema = new Schema<DishInterfaceDoc>({
   name: {
     type: String,
     required: [true, 'Name is required']
@@ -25,7 +26,7 @@ const DishSchema = new Schema({
     required: true,
   },
   description: { type: String },
-  available: { type: Boolean, defult: true },
+  //available: { type: Boolean, defult: true },
   img: { type: String },
 })
 
@@ -34,4 +35,4 @@ DishSchema.methods.toJSON = function () {
   return data
 }
 
-export default model('Dish', DishSchema)
+export default model<DishInterfaceDoc>('Dish', DishSchema)

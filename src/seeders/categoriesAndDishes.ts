@@ -1,14 +1,17 @@
 import { faker } from "@faker-js/faker";
 import { Category, Dish, User } from "../models/index.js";
+import { UserInterfaceDoc } from "../interfaces/user.interface.js"
+import { CategoryInterface } from "../interfaces/category.interface.js";
+import { DishInterface } from "../interfaces/dish.interface.js";
 
 const getAdminsUsers = (async () => {
-  let adminUsers = await User.find({role: "ADMIN"}).exec();
+  let adminUsers: UserInterfaceDoc[] = await User.find({role: "ADMIN"}).exec();
   return adminUsers;
 });
 
 const generateCategories = (async () => {
-  const users = await getAdminsUsers();
-  let categories: any = [];
+  const users: UserInterfaceDoc[] = await getAdminsUsers();
+  let categories: CategoryInterface[] = [];
 
   users.forEach(user => {
     for(let i = 0; i < 3; i++) {
@@ -20,23 +23,23 @@ const generateCategories = (async () => {
   });
 
   // Remove duplicated elements
-  const uniqueCategories = categories.filter((item: any, index: number, self: any) => 
-    index === self.findIndex((obj: any) => obj.name === item.name)
+  const uniqueCategories = categories.filter((item: CategoryInterface, index: number, self: CategoryInterface[]) => 
+    index === self.findIndex((obj: CategoryInterface) => obj.name === item.name)
   )
 
   return uniqueCategories;
 });
 
 export const insertDishes = (async () => {
-  let categories = await generateCategories();
-  let dishes: any = [];
+  let categories: CategoryInterface[] = await generateCategories();
+  let dishes: DishInterface[] = [];
 
   categories.forEach((category: any) => {
     for(let i = 0; i < 6; i++) {
       let name = faker.food.dish();
       let description = faker.food.description();
       let price = faker.number.int({min: 50, max: 500});
-      let dish = {
+      let dish: DishInterface = {
         name: name,
         price: price,
         description: description,
@@ -48,8 +51,8 @@ export const insertDishes = (async () => {
   });
 
   // Remove duplicated elements
-  const uniqueDishes = dishes.filter((item: any, index: number, self: any) => 
-    index === self.findIndex((obj: any) => obj.name === item.name)
+  const uniqueDishes = dishes.filter((item: DishInterface, index: number, self: DishInterface[]) => 
+    index === self.findIndex((obj: DishInterface) => obj.name === item.name)
   )
 
   try {

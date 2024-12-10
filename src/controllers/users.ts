@@ -2,6 +2,7 @@ import { response, request } from "express";
 import { Request, Response } from 'express';
 import bcryptjs from "bcryptjs";
 import { User } from "../models/index.js";
+import { UserInterface, UserInterfaceDoc } from "../interfaces/user.interface.js";
 
 export const fetchUsers = async (req: Request = request, res: Response = response) => {
   const { limit = 5, from = 0 } = req.query
@@ -43,14 +44,14 @@ export const updateUser = async (req: Request, res: Response = response) => {
     remainingData.password = bcryptjs.hashSync(password, salt)
   }
 
-  const user = await User.findByIdAndUpdate(id, remainingData)
+  const user: UserInterfaceDoc | null = await User.findByIdAndUpdate(id, remainingData)
 
   res.json(user)
 }
 
 export const deleteUser = async (req: Request, res: Response = response) => {
   const { id } = req.params
-  const user = await User.findByIdAndUpdate(id, { state: false })
+  const user: UserInterfaceDoc | null = await User.findByIdAndUpdate(id, { state: false })
 
   res.json(user)
 }

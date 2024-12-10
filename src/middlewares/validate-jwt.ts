@@ -7,30 +7,30 @@ export const validateJWT = async (req:Request = request, res:Response = response
   const token = req.header('x-token')
 
   if (!token) {
-    return res.status(401).json({
+    res.status(401).json({
       msg: 'token is required',
     })
   }
 
   try {
-    const tokenData: any = jwt.verify(token, process.env.SECRET_PRIVATE_KEY!)
+    const tokenData: any = jwt.verify(token!, process.env.SECRET_PRIVATE_KEY!)
 
     // Search user by id
-    const user: any = await User.findById(tokenData.uid)
+    const user = await User.findById(tokenData._id)
 
     if (!user) {
-      return res.status(401).json({
+      res.status(401).json({
         msg: "Invalid token - user doesn't DB",
       })
     }
-
     // Check uid
-    if (!user.state) {
-      return res.status(401).json({
+    else if (!user.state) {
+      res.status(401).json({
         msg: 'Invalid token - user deleted',
       })
+    } else {
+      req.user = user;
     }
-    req.user = user;
     next()
   } catch (error) {
     console.log(error)

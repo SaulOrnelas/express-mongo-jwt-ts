@@ -8,7 +8,7 @@ import {
   updateCategory,
   deleteCategory,
 } from '../controllers/categories.js'
-//import { categoryExistsById } from '../helpers/db-validators.js';
+import { categoryExistsById } from '../helpers/db-validators.js';
 
 const router = Router()
 
@@ -24,8 +24,8 @@ router.get(
   '/:id',
   [
     check('id', 'Invalid MongoId').isMongoId(),
-    //check('id').custom(await categoryExistsById),
-    //middlewares.validateFields,
+    check('id').custom(await categoryExistsById),
+    middlewares.validateFields,
   ],
   fetchCategoryById
 )
@@ -34,9 +34,9 @@ router.get(
 router.post(
   '/',
   [
-    //middlewares.validateJWT,
+    middlewares.validateJWT,
     check('name', 'Name is required').not().isEmpty(),
-    //middlewares.validateFields,
+    middlewares.validateFields,
   ],
   createCategory
 )
@@ -45,10 +45,10 @@ router.post(
 router.put(
   '/:id',
   [
-    //middlewares.validateJWT,
+    middlewares.validateJWT,
     check('name', 'Name is required').not().isEmpty(),
-    //check('id').custom(categoryExistsById),
-    //middlewares.validateFields,
+    check('id').custom(categoryExistsById),
+    middlewares.validateFields,
   ],
   updateCategory
 )
@@ -57,11 +57,11 @@ router.put(
 router.delete(
   '/:id',
   [
-    //middlewares.validateJWT,
-    //middlewares.isAdminRole,
+    middlewares.validateJWT,
+    middlewares.isAdminRole,
     check('id', 'Invalid MongoId').isMongoId(),
-    //check('id').custom(categoryExistsById),
-    //middlewares.validateFields,
+    check('id').custom(categoryExistsById),
+    middlewares.validateFields,
   ],
   deleteCategory
 )

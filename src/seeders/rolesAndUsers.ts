@@ -1,6 +1,7 @@
 import { faker } from "@faker-js/faker";
 import bcryptjs from "bcryptjs";
 import { User, Role } from "../models/index.js";
+import { UserInterface } from "../interfaces/user.interface.js";
 
 const roles = [
   {role: "ADMIN"},
@@ -10,7 +11,7 @@ const roles = [
 ]
 
 const generateAdminsUsers = (() => {
-  let admins: any = [];
+  let admins: UserInterface[] = [];
   for(let i = 0; i < 2; i++) {
     const firstname = faker.person.firstName();
     const lastname = faker.person.lastName();
@@ -19,7 +20,7 @@ const generateAdminsUsers = (() => {
     const salt = bcryptjs.genSaltSync()
     const password = bcryptjs.hashSync("admin1234", salt);
   
-    const generatedUser = {
+    const generatedUser: UserInterface = {
       name: `${firstname} ${lastname}`,
       email: email,
       password: password,
@@ -33,7 +34,7 @@ const generateAdminsUsers = (() => {
 })
 
 const generateWaitersUsers = (() => {
-  let waiters: any = [];
+  let waiters: UserInterface[] = [];
   for(let i = 0; i < 5; i++) {
     const firstname = faker.person.firstName();
     const lastname = faker.person.lastName();
@@ -42,7 +43,7 @@ const generateWaitersUsers = (() => {
     const salt = bcryptjs.genSaltSync()
     const password = bcryptjs.hashSync("waiter1234", salt);
   
-    const generatedUser = {
+    const generatedUser: UserInterface = {
       name: `${firstname} ${lastname}`,
       email: email,
       password: password,
@@ -56,7 +57,7 @@ const generateWaitersUsers = (() => {
 })
 
 const generateClientsUsers = (() => {
-  let clients: any = [];
+  let clients: UserInterface[] = [];
   for(let i = 0; i < 20; i++) {
     const firstname = faker.person.firstName();
     const lastname = faker.person.lastName();
@@ -65,7 +66,7 @@ const generateClientsUsers = (() => {
     const salt = bcryptjs.genSaltSync()
     const password = bcryptjs.hashSync("client1234", salt);
 
-    const generatedUser = {
+    const generatedUser: UserInterface = {
       name: `${firstname} ${lastname}`,
       email: email,
       password: password,
@@ -78,9 +79,9 @@ const generateClientsUsers = (() => {
 });
 
 export const insertUsers = (async () => {
-  const adminsUsers = generateAdminsUsers()
-  const waitersUsers = generateWaitersUsers();
-  const clientsUsers = generateClientsUsers();
+  const adminsUsers: UserInterface[] = generateAdminsUsers()
+  const waitersUsers: UserInterface[] = generateWaitersUsers();
+  const clientsUsers: UserInterface[] = generateClientsUsers();
   const allUsers = [...adminsUsers, ...waitersUsers, ...clientsUsers];
 
   // const session = await mongoose.startSession();

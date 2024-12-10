@@ -1,6 +1,7 @@
 import { response } from "express";
 import { Request, Response } from 'express';
 import { Dish } from "../models/index.js";
+import { DishInterface } from "../interfaces/dish.interface.js";
 
 export const fetchDishes = async (req: Request, res: Response = response) => {
   const { limit = 5, from = 0 } = req.query
@@ -23,7 +24,7 @@ export const fetchDishes = async (req: Request, res: Response = response) => {
 
 export const fetchDishById = async (req: Request, res: Response = response) => {
   const { id } = req.params
-  const dish = await Dish.findById(id)
+  const dish: DishInterface | null = await Dish.findById(id)
     .populate('user', 'name')
     .populate('category', 'name')
 
@@ -33,12 +34,13 @@ export const fetchDishById = async (req: Request, res: Response = response) => {
 export const createDish = async (req: Request, res: Response = response) => {
   const { state, user, ...body } = req.body
 
-  const dishDB: any = await Dish.findOne({ name: body.name })
+  const dishDB: DishInterface | null = await Dish.findOne({ name: new RegExp(`${body.name}$`, 'i') });
 
   if (dishDB) {
     res.status(400).json({
-      msg: `Dish ${dishDB.nombre}, already exists`,
-    })
+      msg: `Dish ${dishDB.name}, already exists`,
+    });
+    return;
   }
 
   const data = {
@@ -64,14 +66,14 @@ export const updateDish = async (req: Request, res: Response = response) => {
 
   data.user = req.user?._id
 
-  const dish = await Dish.findByIdAndUpdate(id, data, { new: true })
+  const dish: DishInterface | null = await Dish.findByIdAndUpdate(id, data, { new: true })
 
   res.json(dish)
 }
 
 export const deleteDish = async (req: Request, res: Response = response) => {
   const { id } = req.params
-  const deletedDish = await Dish.findByIdAndUpdate(
+  const deletedDish: DishInterface | null = await Dish.findByIdAndUpdate(
     id,
     { state: false },
     { new: true }

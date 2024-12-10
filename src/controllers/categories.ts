@@ -1,6 +1,7 @@
 import { response } from "express";
 import { Request, Response } from 'express';
 import { Category } from "../models/index.js";
+import { CategoryInterface } from "../interfaces/category.interface.js";
 
 export const fetchCategories = async (req: Request, res: Response = response) => {
   const { limit = 5, from = 0 } = req.query
@@ -22,7 +23,7 @@ export const fetchCategories = async (req: Request, res: Response = response) =>
 
 export const fetchCategoryById = async (req: Request, res: Response = response) => {
   const { id } = req.params
-  const category = await Category.findById(id).populate('user', 'name')
+  const category: CategoryInterface | null = await Category.findById(id).populate('user', 'name')
 
   res.json(category)
 }
@@ -30,12 +31,13 @@ export const fetchCategoryById = async (req: Request, res: Response = response) 
 export const createCategory = async (req: Request, res: Response = response) => {
   const name = req.body.name.toUpperCase()
 
-  const categoryDB = await Category.findOne({ name })
+  const categoryDB: CategoryInterface | null = await Category.findOne({ name })
 
   if (categoryDB) {
     res.status(400).json({
       msg: `Category ${categoryDB.name}, already exists`,
-    })
+    });
+    return;
   }
 
   const data = {
@@ -57,14 +59,14 @@ export const updateCategory = async (req: Request, res: Response = response) => 
   data.name = data.name.toUpperCase()
   data.user = req.user?._id
 
-  const category = await Category.findByIdAndUpdate(id, data, { new: true })
+  const category: CategoryInterface | null = await Category.findByIdAndUpdate(id, data, { new: true })
 
   res.json(category)
 }
 
 export const deleteCategory = async (req: Request, res: Response = response) => {
   const { id } = req.params
-  const deletedCategory = await Category.findByIdAndUpdate(
+  const deletedCategory: CategoryInterface | null = await Category.findByIdAndUpdate(
     id,
     { state: false },
     { new: true }
