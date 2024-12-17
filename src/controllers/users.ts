@@ -1,5 +1,6 @@
 import { response, request } from "express";
 import { Request, Response } from 'express';
+import { validationResult } from "express-validator";
 import bcryptjs from "bcryptjs";
 import { User } from "../models/index.js";
 import { UserInterface, UserInterfaceDoc } from "../interfaces/user.interface.js";
@@ -50,8 +51,15 @@ export const updateUser = async (req: Request, res: Response = response) => {
 }
 
 export const deleteUser = async (req: Request, res: Response = response) => {
-  const { id } = req.params
-  const user: UserInterfaceDoc | null = await User.findByIdAndUpdate(id, { state: false })
-
-  res.json(user)
+  const result = validationResult(req);
+  if (result.isEmpty()){
+    const { id } = req.params
+    const user: UserInterfaceDoc | null = await User.findByIdAndUpdate(id, { state: false })
+  
+    res.json(user)
+  } else {
+    res.status(400).json({
+      errors: result.array()
+    });
+  }
 }

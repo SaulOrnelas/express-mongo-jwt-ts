@@ -15,7 +15,7 @@ export const existsEmail = async (email = '') => {
   // Check if email exists
   const user: UserInterfaceDoc | null = await User.findOne({ email: new RegExp(`${email}$`, 'i') })
   if (user) {
-    return Promise.reject(`The email ${email}, is currently registered`);
+    throw new Error(`The email ${email}, is currently registered`);
   }
 }
 

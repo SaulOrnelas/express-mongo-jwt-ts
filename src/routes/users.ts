@@ -32,7 +32,7 @@ router.post(
     check('email').custom(existsEmail),
     //check('role', 'Role is not valid').isIn(['ADMIN', 'CLIENT']),
     check('role').custom(isValidRole),
-    middlewares.validateFields,
+    middlewares.validateResults,
   ],
   createUser
 )
@@ -44,7 +44,7 @@ router.put(
     check('id', 'Not a valid ID').isMongoId(),
     check('id').custom(userExistsById),
     check('role').custom(isValidRole),
-    middlewares.validateFields,
+    middlewares.validateResults,
   ],
   updateUser
 )
@@ -55,10 +55,10 @@ router.delete(
   [
     middlewares.validateJWT,
     // isAdminRole,
-    middlewares.hasRole('ADMIN', 'WAITER', 'CLIENT', 'OTHER'),
+    middlewares.hasRole('ADMIN', 'WAITER'),
     check('id', 'Not a valid ID').isMongoId(),
     check('id').custom(userExistsById),
-    middlewares.validateFields,
+    middlewares.validateResults,
   ],
   deleteUser
 )

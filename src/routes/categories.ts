@@ -25,7 +25,7 @@ router.get(
   [
     check('id', 'Invalid MongoId').isMongoId(),
     check('id').custom(await categoryExistsById),
-    middlewares.validateFields,
+    middlewares.validateResults,
   ],
   fetchCategoryById
 )
@@ -36,7 +36,7 @@ router.post(
   [
     middlewares.validateJWT,
     check('name', 'Name is required').not().isEmpty(),
-    middlewares.validateFields,
+    middlewares.validateResults,
   ],
   createCategory
 )
@@ -48,7 +48,7 @@ router.put(
     middlewares.validateJWT,
     check('name', 'Name is required').not().isEmpty(),
     check('id').custom(categoryExistsById),
-    middlewares.validateFields,
+    middlewares.validateResults,
   ],
   updateCategory
 )
@@ -61,7 +61,7 @@ router.delete(
     middlewares.isAdminRole,
     check('id', 'Invalid MongoId').isMongoId(),
     check('id').custom(categoryExistsById),
-    middlewares.validateFields,
+    middlewares.validateResults,
   ],
   deleteCategory
 )

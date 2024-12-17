@@ -9,7 +9,8 @@ export const validateJWT = async (req:Request = request, res:Response = response
   if (!token) {
     res.status(401).json({
       msg: 'token is required',
-    })
+    });
+    return;
   }
 
   try {
@@ -22,12 +23,14 @@ export const validateJWT = async (req:Request = request, res:Response = response
       res.status(401).json({
         msg: "Invalid token - user doesn't DB",
       })
+      return;
     }
     // Check uid
     else if (!user.state) {
       res.status(401).json({
         msg: 'Invalid token - user deleted',
       })
+      return;
     } else {
       req.user = user;
     }
@@ -36,6 +39,7 @@ export const validateJWT = async (req:Request = request, res:Response = response
     console.log(error)
     res.status(401).json({
       msg: 'Invalid User',
-    })
+    });
+    return;
   }
 }

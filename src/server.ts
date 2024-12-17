@@ -1,4 +1,4 @@
-import express, { Express } from 'express';
+import express, { Express, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 
 import { dbConnection } from './database/config.js';
@@ -32,6 +32,8 @@ class Server {
 
     // Rutas de mi aplicación
     this.routes()
+
+    //this.errorHandler();
   }
 
   async conectarDB() {
@@ -56,6 +58,16 @@ class Server {
     this.app.use(this.paths.users, usersRoutes)
     this.app.use(this.paths.seeders, seedersRoutes)
   }
+
+  // errorHandler() {
+  //   this.app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+  //     console.error(err.stack); // Log del error para depuración
+  //     res.status(500).json({
+  //       message: 'Internal server error',
+  //       error: process.env.NODE_ENV === 'development' ? err.message : undefined,
+  //     });
+  //   });
+  // }
 
   listen() {
     this.app.listen(this.port, () => {
