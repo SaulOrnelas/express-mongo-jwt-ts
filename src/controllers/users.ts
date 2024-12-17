@@ -51,15 +51,8 @@ export const updateUser = async (req: Request, res: Response = response) => {
 }
 
 export const deleteUser = async (req: Request, res: Response = response) => {
-  const result = validationResult(req);
-  if (result.isEmpty()){
-    const { id } = req.params
-    const user: UserInterfaceDoc | null = await User.findByIdAndUpdate(id, { state: false })
-  
-    res.json(user)
-  } else {
-    res.status(400).json({
-      errors: result.array()
-    });
-  }
+  const { id } = req.params
+  const user: UserInterfaceDoc | null = await User.findByIdAndUpdate(id, { state: false })
+
+  res.json(user)
 }
